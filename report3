@@ -1,0 +1,8 @@
+For n = 100
+Time taken in concurrent merge sort : 0.000328 seconds 
+Time taken in normal merge sort : 0.000080 seconds 
+
+For n = 100
+Time taken in concurrent merge sort : 0.000518 seconds 
+Time taken in normal merge sort : 0.000095 seconds 
+
