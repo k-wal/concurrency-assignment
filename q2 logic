@@ -1,0 +1,68 @@
+q2 logic
+
+
+function evm()
+{
+	while(booth.left_voters>0)
+		polling_ready_evm(booth,count)  --count is random
+		evm_voting(booth)
+}
+
+function polling_ready_evm(count,booth)
+{
+	//don't return till all voters are assigned an evm
+	while(count>0 and left_voters>0)
+	{
+		lock(booth_lock)
+		booth.current_evm=evm_index
+		booth.left_voters--
+		booth.voters_in_line.signal()
+		count--
+		booth.ready_evm.wait()
+	}
+
+}
+
+function evm_voting(booth)
+{
+	//evm moving to voting
+	sleep(3)
+	//evm done voting
+}
+
+function voter()
+{
+	voter_wait_for_evm(booth)
+	voter_in_slot(booth)
+}
+
+function voter_wait_for_emv() 
+{
+	//return only  when an evm in the booth has a free slot
+	lock(booth.booth_lock)
+	booth.left_voters++
+	unlock(booth.booth_lock)
+	booth.voters_in_line.wait()
+	print(voter voter_id at booth booth.booth_id now moves to evm booth.current_evm)
+	unlock(booth_lock)
+	booth.ready_evm.signal()
+
+}
+
+function voter_in_slot(booth)
+{
+	//let evm know that voter is in the slot
+}
+
+
+
+struct booth
+{
+	int current_evm
+	int evm_number
+	threads evm[evm_number]
+	int waiting_voters
+	lock booth_lock
+	condition voters_in_line,voters_moving_to_slot,ready_evm
+
+}
