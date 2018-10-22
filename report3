@@ -1,12 +1,6 @@
 For n = 100
-Time taken in concurrent merge sort : 0.000328 seconds 
-Time taken in normal merge sort : 0.000080 seconds 
-
-For n = 100
-Time taken in concurrent merge sort : 0.000518 seconds 
-Time taken in normal merge sort : 0.000095 seconds 
-
-For n = 10
-Time taken in concurrent merge sort : 0.000220 seconds 
-Time taken in normal merge sort : 0.000020 seconds 
+Time taken in merge sort with processes: 0.000389 seconds 
+Time taken in merge sort with threads : 0.008853 seconds 
+Time taken in normal merge sort : 0.000100 seconds 
+Merge sort with threads failed
 

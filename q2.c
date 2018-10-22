@@ -95,15 +95,17 @@ int main()
         	voter_index++;
     	}
 	}
-	//keep checking if all threads are done
-	while(1)
+	
+	//joining voter and evm threads
+	for(i=0; i<voter_index; i++)
 	{
-		//if all threads are done, exit
-		if(total_voters==voter_index && total_evms==evm_index)
-		{
-			return 0;
-		}
+		pthread_join(voter_thread[i],NULL);
 	}
+	for(i=0; i<evm_index; i++)
+	{
+		pthread_join(evm_thread[i],NULL);
+	}
+	return 0;
 }
 
 

@@ -12,12 +12,11 @@ struct args {
     int current_players;
 };
 
-
-
 pthread_t tid[500];
 int games=0,player1_index,player2_index,refree_index,team=0,ready_team=0,waiting_players=0;
 pthread_mutex_t refree_lock,player1_lock,player2_lock,waiting_players_lock,ready_team_lock,team_lock,games_lock;
 
+//function called byb refree/player right after being created
 void enterAcademy(int thread_index,int type)
 {
 	if(type==0)
@@ -31,6 +30,7 @@ void enterAcademy(int thread_index,int type)
 	return;
 }
 
+//function called by player/refree after forming in groups of 3
 void enterCourt(int thread_index,int type)
 {	
 	if(type==0)
@@ -45,6 +45,7 @@ void enterCourt(int thread_index,int type)
 	return;
 }
 
+//function called by player
 void warmUp(int thread_index)
 {
 	printf("Player with index %d warming up\n",thread_index);
@@ -57,6 +58,7 @@ void warmUp(int thread_index)
 	return;
 }
 
+//function called by refree
 void adjustEquipment(int thread_index)
 {
 	printf("Refree with index %d adjusting equipment\n",thread_index);
@@ -69,6 +71,7 @@ void adjustEquipment(int thread_index)
 	return;
 }
 
+//function called by refree/player to meet organizer
 void meetOrganizer(int thread_index,int type,int current_players)
 {
 	pthread_mutex_lock(&waiting_players_lock);
@@ -121,7 +124,7 @@ void meetOrganizer(int thread_index,int type,int current_players)
 	}
 }
 
-
+//startgame, called by refree to start game and free organizer
 void startGame(void)
 {
 	while(1)
@@ -149,6 +152,7 @@ void startGame(void)
 	}
 }
 
+//function called when player is created
 void* player_function(void *arg)
 {
 	int current_players=((struct args*)arg)->current_players;
@@ -159,6 +163,7 @@ void* player_function(void *arg)
 	warmUp(thread_index);
 }
 
+//function called when refree is created
 void* refree_function(void *arg)
 {
 	int current_players=((struct args*)arg)->current_players;
@@ -226,6 +231,7 @@ int main()
 		int random1 = rand()%100 + 1;
 		if(p_prob>random1)
 		{
+			//creating players
 			current_players++;
 			index->current_players=current_players;
 			this=0;
@@ -237,6 +243,7 @@ int main()
 		}
 		else
 		{
+			//creating refrees
 			current_refrees++;
 			index->current_players=current_players;
 			this=1;
@@ -249,9 +256,10 @@ int main()
 
 
 	}
-	while(1)
+	//joining all threads
+	for(i=0; i<3*n; i++)
 	{
-		if(games==n)
-			return 0;
+		pthread_join(tid[i],NULL);
 	}
+	return 0;
 }
